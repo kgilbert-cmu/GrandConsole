@@ -36,6 +36,9 @@ def main():
 	while len(queue['data']) > 0: # break when there's no more pages...
 		logging.info(f"Search result returned {len(queue['data'])} more results")
 		for item in queue['data']:
+			if 'from' not in item:
+				logging.debug(f"Item did not have data: {item}")
+				continue
 			logging.debug(f"Inspecting next item {item['id']} from {item['from']['name']}")
 			p = { 'name' : item['from']['name'],
 			      'date' : item['created_time'] }
@@ -106,7 +109,16 @@ def main():
 	logging.info("Most posts:")
 	for u, n in postCounter:
 		print(row_format.format(u, n))
-	print("")	
+	print("")
+	
+	posts_over_time = [p['date'][0:10] for p in posts]
+	posts_per_month = [d[0:7] for d in posts_over_time]
+	timeline = Counter(posts_per_month)
+	monthKeys = list(timeline.keys())
+	monthKeys.sort()
+	for m in monthKeys:
+		print(row_format.format(m, timeline[m]))
+	print("")
 
 if __name__ == "__main__":
 	setup()
