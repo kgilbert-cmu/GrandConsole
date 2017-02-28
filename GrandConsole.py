@@ -38,7 +38,8 @@ def main():
 		for item in queue['data']:
 			if 'from' not in item:
 				logging.debug(f"Item did not have data: {item}")
-				continue
+				item['from'] = { 'name' : "{Unknown}" }
+				logging.info(f"Imputed name field into {item['id']}")
 			logging.debug(f"Inspecting next item {item['id']} from {item['from']['name']}")
 			p = { 'name' : item['from']['name'],
 			      'date' : item['created_time'] }
